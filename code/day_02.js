@@ -178,3 +178,45 @@ function longestWithK(str, k) {
   return max;
 }
 console.log(longestWithK("eceba", 2));
+
+/*
+Q-6 Find the longest substring that can become all same characters by replacing at most k characters.
+Input: s = "AABABBA", k = 1 
+Output: 4   // "AABA" can be replaced with "AAAA"
+*/
+
+/*
+Points to understand here : 
+step 1 : We are maintaining a left and right to keep the window growing
+step 2: We make the map that has frequency of elements and also at the same time we track
+the max Frequency of the characthers, how we do so ? simple Math.max and we compare it with current max freq and from the value we get from hashmap
+step 3 : We check that total window lenght - max frequency is always less than given k charachters now why ? 
+- lets iterate .
+// "A" - max freq 1, window size 1 => 1-1 = 0 < k=1
+// "AA" - max freq 2, window size 2 => 2-2 = 0 < k=1
+//"AAB" - max freq 2, window size 3 => 3-2 = 1 = k=1
+//"AABA" - max freq 3, window size 4 => 4-3 = 1 = k=1
+//"AABAB" - max freq 3, window size 5 => 5-3 < k=1 --- here we need to shrink the window from left and reduce the charachter frequency in hashmap
+
+step 5 : Finally keep track of max length of the created substring on every iteration.
+*/
+
+function longestSubstringWithSame(str, k) {
+  let map = new Map();
+  let left = 0;
+  let maxFreq = 0;
+  let maxChar = 0;
+  for (let right = 0; right < str.length; right++) {
+    let char = str[right];
+    map.set(char, (map.get(char) || 0) + 1);
+    maxFreq = (maxFreq, map.get(char));
+    while (right - left + 1 - maxFreq > k) {
+      let leftChar = str[left];
+      map.set(leftChar, map.get(leftChar) - 1);
+      left++;
+    }
+    maxChar = Math.max(maxChar, right - left + 1);
+  }
+  return maxChar;
+}
+console.log(longestSubstringWithSame("AABABBA", 1));
