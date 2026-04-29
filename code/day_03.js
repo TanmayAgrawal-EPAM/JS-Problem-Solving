@@ -108,3 +108,24 @@ const people2 = [
 ]
  91
 */
+
+const people = [
+  ["Bobby", "87"],
+  ["Charles", "100"],
+  ["Eric", "64"],
+  ["Charles", "22"],
+];
+
+let result = people.reduce((acc, curr) => {
+  let [name, score] = curr;
+  acc[name] = [
+    (acc[name] ? acc[name][0] : 0) + Number(score),
+    acc[name] ? ++acc[name][1] : 1,
+  ];
+  return acc;
+}, {});
+console.log("result", result);
+console.log("Obj entries", Object.entries(result));
+console.log(
+  Math.max(...Object.entries(result).map((items) => items[1][0] / items[1][1])),
+);
